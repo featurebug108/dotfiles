@@ -31,6 +31,8 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     html
+     csv
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
@@ -44,10 +46,11 @@ values."
      emacs-lisp
      git
      markdown
+     html
      haskell
      org
      (shell :variables
-            shell-default-shell 'ansi-term
+            shell-default-shell 'eshell
             shell-default-height 30
             shell-default-position 'bottom)
      spell-checking
@@ -57,6 +60,7 @@ values."
      python
      ipython-notebook
      (scala :variables scala-auto-start-ensime t)
+     gnus
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -267,7 +271,7 @@ values."
    ;;                       text-mode
    ;;   :size-limit-kb 1000)
    ;; (default nil)
-   dotspacemacs-line-numbers nil
+   dotspacemacs-line-numbers 'relative 
    ;; Code folding method. Possible values are `evil' and `origami'.
    ;; (default 'evil)
    dotspacemacs-folding-method 'evil
@@ -313,6 +317,11 @@ before packages are loaded. If you are unsure, you should try in setting them in
 
   ;; nov.el (epub reader)
   (push '("\\.epub\\'" . nov-mode) auto-mode-alist)
+  ;;resume emacs as you left it
+  (setq dotspacemacs-auto-resume-layouts t)
+  ;;consider underscore as part of word
+  (modify-syntax-entry ?_ "w")
+
   )
 
 (defun dotspacemacs/user-config ()
@@ -339,6 +348,10 @@ you should place your code here."
   ;; Browse url function use w3m
   (setq w3m-view-this-url-new-session-in-background t)
   ;; W3M view url new session in background
+  ;;disable ensime startup message
+  (setq ensime-startup-notification nil)
+  ;; org-agenda files
+  (setq org-agenda-files (list "~/orgfiles/activitylog.org"))
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -350,7 +363,7 @@ you should place your code here."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (ein skewer-mode request-deferred websocket deferred js2-mode simple-httpd helm-w3m w3m esxml pixiv-novel-mode pdf-tools tablist intero hlint-refactor hindent helm-hoogle haskell-snippets flycheck-haskell company-ghci company-ghc ghc haskell-mode company-cabal cmm-mode xterm-color shell-pop multi-term eshell-z eshell-prompt-extras esh-help nov noflet ensime sbt-mode scala-mode key-chord git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip flycheck diff-hl auto-dictionary org-mime pyenv-mode orgit org-pomodoro markdown-toc magit-gitflow hy-mode helm-company helm-c-yasnippet evil-magit magit magit-popup git-commit ghub let-alist company-statistics company-anaconda auto-yasnippet anaconda-mode yapfify unfill smeargle pyvenv pytest py-isort pip-requirements org-projectile org-category-capture org-present alert log4e gntp org-download mwim mmm-mode markdown-mode live-py-mode dash-functional htmlize helm-pydoc helm-gitignore gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md fuzzy with-editor cython-mode company yasnippet pythonic ac-ispell auto-complete ws-butler winum volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint info+ indent-guide hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg eval-sexp-fu highlight elisp-slime-nav dumb-jump diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed ace-link ace-jump-helm-line helm helm-core popup which-key undo-tree org-plus-contrib hydra evil-unimpaired f s dash async aggressive-indent adaptive-wrap ace-window avy))))
+    (web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data csv-mode ein skewer-mode request-deferred websocket deferred js2-mode simple-httpd helm-w3m w3m esxml pixiv-novel-mode pdf-tools tablist intero hlint-refactor hindent helm-hoogle haskell-snippets flycheck-haskell company-ghci company-ghc ghc haskell-mode company-cabal cmm-mode xterm-color shell-pop multi-term eshell-z eshell-prompt-extras esh-help nov noflet ensime sbt-mode scala-mode key-chord git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip flycheck diff-hl auto-dictionary org-mime pyenv-mode orgit org-pomodoro markdown-toc magit-gitflow hy-mode helm-company helm-c-yasnippet evil-magit magit magit-popup git-commit ghub let-alist company-statistics company-anaconda auto-yasnippet anaconda-mode yapfify unfill smeargle pyvenv pytest py-isort pip-requirements org-projectile org-category-capture org-present alert log4e gntp org-download mwim mmm-mode markdown-mode live-py-mode dash-functional htmlize helm-pydoc helm-gitignore gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md fuzzy with-editor cython-mode company yasnippet pythonic ac-ispell auto-complete ws-butler winum volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint info+ indent-guide hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg eval-sexp-fu highlight elisp-slime-nav dumb-jump diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed ace-link ace-jump-helm-line helm helm-core popup which-key undo-tree org-plus-contrib hydra evil-unimpaired f s dash async aggressive-indent adaptive-wrap ace-window avy))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
